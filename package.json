@@ -1,0 +1,10 @@
+{
+  "name": "electromagnetic-project",
+  "version": "1.0.0",
+  "private": true,
+  "description": "전자기 코일 가속기 속도 예측 및 실험값 비교 시뮬레이터",
+  "scripts": {
+    "start": "python3 -m http.server 4173",
+    "test": "node --test"
+  }
+}
