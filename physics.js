@@ -53,15 +53,15 @@
       throw new RangeError("비교할 속도값이 올바르지 않습니다.");
     }
     const differenceMps = Math.abs(theorySpeedMps - realSpeedMps);
-    return { differenceMps, errorRate: (differenceMps / realSpeedMps) * 100 };
+    return { differenceMps, relativeDifferenceRate: (differenceMps / realSpeedMps) * 100 };
   }
 
-  function reverseEfficiency(input, measuredSpeedMps) {
+  function equivalentOnePassEfficiency(input, measuredSpeedMps) {
     const denominator = input.coils * input.inductanceH * input.currentA ** 2;
     if (!isPositive(input.massKg) || !isPositive(denominator) || !isNonNegative(measuredSpeedMps)) return NaN;
     const requiredEnergyTerm = input.massKg * (measuredSpeedMps ** 2 - input.initialSpeed ** 2) + 2 * input.energyLossJ;
     return Math.max(0, requiredEnergyTerm / denominator);
   }
 
-  return { validateTheory, theory, lapSpeed, experiment, compare, reverseEfficiency };
+  return { validateTheory, theory, lapSpeed, experiment, compare, equivalentOnePassEfficiency };
 });

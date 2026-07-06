@@ -38,14 +38,14 @@ test("원형 궤도의 한 바퀴 속도와 반복 측정 평균을 계산한다
   assert.ok(Math.abs(result.averageSpeedMps - 1.4510396505) < 1e-9);
 });
 
-test("오차율은 실험값을 분모로 계산한다", () => {
+test("상대 차이율은 실험값을 분모로 계산한다", () => {
   const result = Physics.compare(1.6, 1.45);
   assert.ok(Math.abs(result.differenceMps - 0.15) < 1e-12);
-  assert.ok(Math.abs(result.errorRate - 10.3448275862) < 1e-9);
+  assert.ok(Math.abs(result.relativeDifferenceRate - 10.3448275862) < 1e-9);
 });
 
-test("실측 속도로 효율을 역산한다", () => {
-  const efficiency = Physics.reverseEfficiency(base, 1.45);
+test("포화속도를 1회전 등가 효율로 환산한다", () => {
+  const efficiency = Physics.equivalentOnePassEfficiency(base, 1.45);
   assert.ok(Math.abs(efficiency - 0.2628125) < 1e-12);
 });
 

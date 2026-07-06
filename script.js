@@ -155,31 +155,31 @@ function updateComparison() {
   const theorySpeed = state.theory.speedMps;
   const realSpeed = state.experiment.averageSpeedMps;
   const comparison = CoilPhysics.compare(theorySpeed, realSpeed);
-  const reverseEfficiency = CoilPhysics.reverseEfficiency(state.theoryInput, realSpeed);
+  const equivalentEfficiency = CoilPhysics.equivalentOnePassEfficiency(state.theoryInput, realSpeed);
   const maxSpeed = Math.max(theorySpeed, realSpeed, 0.001);
 
   $("#compare-theory").textContent = `${format(theorySpeed)} m/s`;
   $("#compare-real").textContent = `${format(realSpeed)} m/s`;
   $("#average-time").textContent = `${format(state.experiment.averageTimeS)} s`;
   $("#speed-difference").textContent = `${format(comparison.differenceMps)} m/s`;
-  $("#error-rate").textContent = `${format(comparison.errorRate, 1)}%`;
-  $("#reverse-efficiency").textContent = `${format(reverseEfficiency * 100, 1)}%`;
+  $("#error-rate").textContent = `${format(comparison.relativeDifferenceRate, 1)}%`;
+  $("#reverse-efficiency").textContent = `${format(equivalentEfficiency * 100, 1)}%`;
   $("#theory-bar").style.width = `${(theorySpeed / maxSpeed) * 100}%`;
   $("#real-bar").style.width = `${(realSpeed / maxSpeed) * 100}%`;
 
   let interpretation;
-  if (comparison.errorRate < 5) {
-    interpretation = "두 값이 비슷해 현재 효율 가정이 실험 결과를 잘 설명한다고 볼 수 있다.";
+  if (comparison.relativeDifferenceRate < 5) {
+    interpretation = "두 값은 수치상 비슷하지만 회전 단계가 달라 모델 정확도의 근거로 사용할 수 없다.";
   } else if (theorySpeed > realSpeed) {
-    interpretation = "실험 속도가 더 낮은 이유는 레일 마찰, 코일의 열 손실, 작동 타이밍과 영상 측정 오차등으로 해석할 수 있다.";
+    interpretation = "1회전 기준값이 더 크지만 속도 의존 손실이 모델에 없어 원인을 이 비교만으로 확정할 수 없다.";
   } else {
-    interpretation = "실험 속도가 더 높아 입력한 효율이 낮게 가정되었거나 전류·인덕턴스·궤도 측정값에 차이가 있을 가능성이 크다.";
+    interpretation = "포화 실험값이 더 높은 것은 여러 바퀴 동안 코일을 반복 통과하며 에너지가 누적된 결과로 해석할 수 있다.";
   }
-  const reverseNote = reverseEfficiency > 1
-    ? " 역산 효율이 100%를 넘으므로 입력 변수 또는 측정 방법을 다시 확인해야 한다."
-    : ` 실험값으로 역산한 에너지 변환 효율은 ${format(reverseEfficiency * 100, 1)}%이다.`;
+  const equivalentNote = equivalentEfficiency > 1
+    ? " 1회전 등가 효율이 100%를 넘으므로 입력 변수와 모델 적용 범위를 다시 확인해야 한다."
+    : ` 포화속도를 1회전 만에 얻었다고 환산한 등가 효율은 ${format(equivalentEfficiency * 100, 1)}%이며, 실제 효율 측정값은 아니다.`;
 
-  $("#analysis-text").textContent = `입력 조건의 이론 속도는 ${format(theorySpeed)} m/s이고, ${state.experiment.validTimes.length}회 영상 측정의 평균 속도는 ${format(realSpeed)} m/s이다. 두 값의 오차율은 ${format(comparison.errorRate, 1)}%로 나타났다. ${interpretation}${reverseNote}`;
+  $("#analysis-text").textContent = `입력 조건의 1회전 기준속도는 ${format(theorySpeed)} m/s이고, ${state.experiment.validTimes.length}회 영상 측정의 포화속도 평균은 ${format(realSpeed)} m/s이다. 두 값의 상대 차이율은 ${format(comparison.relativeDifferenceRate, 1)}%이다. 이는 서로 다른 회전 단계의 참고 비교이며 모델 오차율이 아니다. ${interpretation}${equivalentNote}`;
 }
 
 const graphInfo = {
