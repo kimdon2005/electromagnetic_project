@@ -2,8 +2,9 @@
 
 const $ = (selector, scope = document) => scope.querySelector(selector);
 const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
-const STORAGE_KEY = "coil-lab-state-v1";
-const DEFAULT_TIMES = [0.52, 0.5, 0.54, 0.51, 0.53];
+const STORAGE_KEY = "coil-lab-state-v2";
+// 상단 영상 7개의 정상상태 회전 주기(T = 2πr/v), r = 0.085 m.
+const DEFAULT_TIMES = [0.1628, 0.1686, 0.1667, 0.1667, 0.1667, 0.1672, 0.1668];
 
 const state = {
   graph: "current",
@@ -81,8 +82,8 @@ function updateTheory() {
   $("#kinetic-energy").textContent = formatEnergy(result.kineticEnergyJ);
   $("#speed-gauge").style.width = `${Math.min(100, Math.max(2, result.speedMps * 20))}%`;
   $("#model-note").textContent = input.energyLossJ > 0
-    ? `자기 에너지의 ${format(input.efficiency * 100, 0)}%가 변환되고 ${format(input.energyLossJ * 1000, 2)} mJ가 손실된다고 가정했습니다.`
-    : `입력 조건에서 자기 에너지의 ${format(input.efficiency * 100, 0)}%가 구슬의 운동으로 변환된다고 가정했습니다.`;
+    ? `자기 에너지의 ${format(input.efficiency * 100, 0)}%가 변환되고 ${format(input.energyLossJ * 1000, 2)} mJ가 손실된다고 가정했습니다. 인덕턴스·전류·효율은 비교용 추정값입니다.`
+    : `자기 에너지의 ${format(input.efficiency * 100, 0)}%가 구슬의 운동으로 변환된다고 가정했습니다. 인덕턴스·전류·효율은 비교용 추정값입니다.`;
 
   updateComparison();
   drawChart();
@@ -323,7 +324,7 @@ function restoreState() {
 }
 
 function resetTheory() {
-  const defaults = { mass: 10, coils: 4, inductance: 5, current: 2, efficiency: 10, initialSpeed: 0, energyLoss: 0 };
+  const defaults = { mass: 9.03, coils: 6, inductance: 5, current: 5, efficiency: 10, initialSpeed: 0, energyLoss: 0 };
   Object.entries(defaults).forEach(([key, value]) => { theoryFields[key].value = value; });
   updateTheory();
 }
@@ -336,7 +337,7 @@ function init() {
   $("#radius").addEventListener("input", () => updateExperiment(true));
   $("#reset-theory").addEventListener("click", resetTheory);
   $("#reset-experiment").addEventListener("click", () => {
-    $("#radius").value = 12;
+    $("#radius").value = 8.5;
     state.times = [...DEFAULT_TIMES];
     updateExperiment(true);
   });
