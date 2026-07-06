@@ -51,7 +51,7 @@
       </section>
 
       <section class="formula-strip" aria-label="핵심 물리식">
-        <div><span>01</span><p>코일 자기 에너지</p><strong>E<sub>mag</sub> = ½LI²</strong></div>
+        <div><span>01</span><p>N개 코일의 총 자기 에너지</p><strong>E<sub>mag,total</sub> = N × ½LI²</strong></div>
         <div><span>02</span><p>구슬의 운동에너지</p><strong>E<sub>k</sub> = ½mv²</strong></div>
         <div><span>03</span><p>원형 궤도 실측 속도</p><strong>v = 2πr / T</strong></div>
       </section>
@@ -116,11 +116,11 @@
             <div class="speed-result"><strong id="theory-speed">2.882</strong><span>m/s</span></div>
             <div class="speed-scale" aria-hidden="true"><i id="speed-gauge"></i></div>
             <div class="energy-results">
-              <div><span>총 자기 에너지</span><strong id="magnetic-energy">0.3750 J</strong></div>
+              <div><span id="magnetic-energy-label">코일 6개 총 자기 에너지</span><strong id="magnetic-energy">0.3750 J</strong></div>
               <div><span>변환 가능 에너지</span><strong id="converted-energy">0.0375 J</strong></div>
               <div><span>예상 운동에너지</span><strong id="kinetic-energy">0.0375 J</strong></div>
             </div>
-            <p class="model-note" id="model-note">자기 에너지의 10%가 운동으로 변환된다고 가정했습니다. 인덕턴스·전류·효율은 비교용 추정값입니다.</p>
+            <p class="model-note" id="model-note">코일 1개의 자기 에너지에 코일 6개를 곱해 총에너지를 계산합니다. 이 중 10%가 운동으로 변환된다고 가정했습니다.</p>
           </div>
         </div>
       </section>

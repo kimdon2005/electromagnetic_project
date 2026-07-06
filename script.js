@@ -77,13 +77,15 @@ function updateTheory() {
   state.theory = result;
 
   $("#theory-speed").textContent = format(result.speedMps);
+  $("#magnetic-energy-label").textContent = `코일 ${input.coils}개 총 자기 에너지`;
   $("#magnetic-energy").textContent = formatEnergy(result.magneticEnergyJ);
   $("#converted-energy").textContent = formatEnergy(result.convertedEnergyJ);
   $("#kinetic-energy").textContent = formatEnergy(result.kineticEnergyJ);
   $("#speed-gauge").style.width = `${Math.min(100, Math.max(2, result.speedMps * 20))}%`;
+  const perCoilEnergy = result.magneticEnergyJ / input.coils;
   $("#model-note").textContent = input.energyLossJ > 0
-    ? `자기 에너지의 ${format(input.efficiency * 100, 0)}%가 변환되고 ${format(input.energyLossJ * 1000, 2)} mJ가 손실된다고 가정했습니다. 인덕턴스·전류·효율은 비교용 추정값입니다.`
-    : `자기 에너지의 ${format(input.efficiency * 100, 0)}%가 구슬의 운동으로 변환된다고 가정했습니다. 인덕턴스·전류·효율은 비교용 추정값입니다.`;
+    ? `코일 1개당 ${format(perCoilEnergy, 4)} J에 ${input.coils}개를 곱해 총에너지를 계산했습니다. 변환 효율은 ${format(input.efficiency * 100, 0)}%이고 손실은 ${format(input.energyLossJ * 1000, 2)} mJ입니다.`
+    : `코일 1개당 ${format(perCoilEnergy, 4)} J에 ${input.coils}개를 곱해 총에너지를 계산했습니다. 이 중 ${format(input.efficiency * 100, 0)}%가 구슬의 운동에너지로 변환된다고 보았습니다.`;
 
   updateComparison();
   drawChart();
